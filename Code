@@ -1,0 +1,72 @@
+
+/*Backtracking
+Word Search 
+Given a 2D board and a word, find if the word exists in the grid.
+The word can be constructed from letters of sequentially adjacent cell, 
+where "adjacent" cells are those horizontally or vertically neighboring. 
+The same letter cell may not be used more than once.
+For example,
+Given board =
+[
+  ["ABCE"],
+  ["SFCS"],
+  ["ADEE"]
+]
+
+word = "ABCCED", -> returns true,
+word = "SEE", -> returns true,
+word = "ABCB", -> returns false.
+解题思路：回溯法
+1.首先找到第一个字符相符合的位置。
+2.开始回溯查找，特殊符号标记这个位置已经访问。
+3.依次上下左右递归查找，如何都不符合，恢复原来字符。
+4.选取下一个位置，重新开始。
+*/
+code:
+
+class Solution {
+public:
+    bool exist(vector<vector<char> > &board, string word) {
+        int row = board.size();
+        if (row == 0)
+            return false;
+        int col = board[0].size();
+        if (word.length() == 0)
+            return true;
+        
+        for (int i = 0; i < row; ++i)
+            for (int j = 0; j < col; ++j){
+                if ((board[i][j] == word[0]) &&
+                    dfs(i, j, 0, word, board))
+                    return true;
+            }
+            
+         return false;
+    }
+    
+    bool dfs(int row, int col, int index, string& word, vector<vector<char> > &board){
+        if (index == word.size() -1)
+            return true;
+        char ctmp = board[row][col];
+        board[row][col] = '#';
+        
+        //top
+        if (row-1>=0 && board[row-1][col] == word[index+1])
+            if (dfs(row-1, col, index+1, word, board))
+                return true;
+        //bottom
+        if (row + 1< board.size() && board[row+1][col] == word[index+1])
+            if (dfs(row+1, col, index+1, word, board))
+                return true;
+        //left
+        if (col-1>=0 && board[row][col-1] == word[index+1])
+            if (dfs(row, col-1, index+1, word, board))
+                return true;
+        //right
+        if (col+1 < board[0].size() && board[row][col+1] == word[index+1])
+            if (dfs(row, col+1, index+1, word, board))
+                return true;
+        board[row][col] = ctmp;
+        
+        return false;
+    }
