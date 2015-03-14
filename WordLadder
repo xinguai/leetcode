@@ -1,0 +1,61 @@
+/*
+ * Given two words (start and end), and a dictionary, 
+ * find the length of shortest transformation sequence from start to end, such that:
+ * Only one letter can be changed at a time
+ * Each intermediate word must exist in the dictionary
+ * For example,
+ * Given:
+ * start = "hit"
+ * end = "cog"
+ * dict = ["hot","dot","dog","lot","log"]
+ * As one shortest transformation is "hit" -> "hot" -> "dot" -> "dog" -> "cog",
+ * return its length 5.
+
+ * Note:
+ * Return 0 if there is no such transformation sequence.
+ * All words have the same length.
+ * All words contain only lowercase alphabetic characters.
+ 解题思路：
+ 其实是采用广度优先进行搜索，采用队列来保存搜索的层级关系
+ 1.队列中的初始元素为start，后面push一个空字符串（“”）来表示层级关系
+ 2.下一层的字符来start 的每个位置做（a-z)的搜索，在字典里面查找，找到就从字典里面删除，
+ 并加入层级队列中，如果刚好==end，则找到return
+ 3.搜索完一层，length+1，然后加上层级标示，继续下层搜索。
+ */
+ 
+ class Solution {
+public:
+    int ladderLength(string start, string end, unordered_set<string> &dict) {
+        std::queue<std::string> breadth_queue;
+        breadth_queue.push(start);
+        breadth_queue.push("");
+        int ret = 1;
+        
+        while (!breadth_queue.empty()){
+            std::string strCur = breadth_queue.front();
+            breadth_queue.pop();
+            if (strCur != ""){
+                for (int i = 0; i < strCur.size(); ++i){
+                    char tmp = strCur[i];
+                    for (char c = 'a'; c <= 'z'; ++c){
+                        if (c == strCur[i])
+                            continue;
+                        strCur[i] = c;
+                        if (strCur == end)
+                            return ret + 1;
+                        if (dict.find(strCur) != dict.end()){
+                            breadth_queue.push(strCur);
+                            dict.erase(strCur);
+                        }
+                    }
+                    strCur[i] = tmp;
+                }
+            }else if (!breadth_queue.empty()){
+                ++ret;
+                breadth_queue.push("");
+            }
+        }
+        
+        return 0;
+    }
+};
