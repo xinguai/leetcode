@@ -1,0 +1,39 @@
+/*
+ * Given a list of non negative integers, arrange them such that they form the largest number.
+ * For example, given [3, 30, 34, 5, 9], the largest formed number is 9534330.
+ * Note: The result may be very large, so you need to return a string instead of an integer.
+ * Credits:
+ * Special thanks to @ts for adding this problem and creating all test cases.
+ *解题思路：
+ 对数组转为字符串后，对其进行排序，关键是自定义比较函数 
+ bool compare (std::string& str1, std::string& str2){
+  return str1 + str2 > str2 + str1;
+ }
+ */
+ 
+ class Solution {
+public:
+    string largestNumber(vector<int> &num) {
+        std::vector<std::string> vecStr;
+        
+        for (int i = 0; i < num.size(); ++i){
+            vecStr.push_back(std::to_string(num[i]));
+        }
+        
+        std::sort(vecStr.begin(), vecStr.end(), compare);
+        std::string strRet;
+        
+        for (int i = 0; i < vecStr.size(); ++i){
+            strRet += vecStr[i];
+        }
+        
+        if (strRet.size() > 0 && strRet[0] == '0')
+            return "0";
+            
+        return strRet;
+    }
+    
+    static bool compare(std::string& strFirst, std::string strSecond){
+        return strFirst + strSecond > strSecond + strFirst;
+    }
+};
