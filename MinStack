@@ -1,0 +1,38 @@
+/*
+ * Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
+ * push(x) -- Push element x onto stack.
+ * pop() -- Removes the element on top of the stack.
+ * top() -- Get the top element.
+ * getMin() -- Retrieve the minimum element in the stack
+ 解题思路：
+  用两个std::stack,一个用来保存元素，一个用来保存最小值
+  注意往两个stack中压入第一个元素时的判断。
+ */
+ 
+ class MinStack {
+public:
+    void push(int x) {
+       EltStack_.push(x);
+        
+       if (MinEltStack_.size() == 0|| x <= MinEltStack_.top())
+          MinEltStack_.push(x);
+    }
+
+    void pop() { 
+        int elt = MinEltStack_.top();
+        if (elt == EltStack_.top())
+          MinEltStack_.pop();
+        EltStack_.pop();
+    }
+
+    int top() {
+        return EltStack_.top();
+    }
+
+    int getMin() {
+        return MinEltStack_.top();
+    }
+    
+    std::stack<int> EltStack_;
+    std::stack<int> MinEltStack_;
+};
