@@ -1,0 +1,52 @@
+/*
+ * Design and implement a data structure for Least Recently Used (LRU) cache. 
+ * It should support the following operations: get and set.
+ * get(key) - Get the value (will always be positive) of the key if the key exists in the cache, otherwise return -1.
+ * set(key, value) - Set or insert the value if the key is not already present.
+ * When the cache reached its capacity, it should invalidate the least recently used item before inserting a new item.
+ * 解题思路：
+ 通过一个hash map和一个双向链表来实现
+ hash map 的value存双向链表的iterator
+ */
+ 
+ class LRUCache{
+public:
+    struct CacheNode{
+        int key_;
+        int value_;
+        CacheNode(int key, int value):
+        key_(key),value_(value){}
+    };
+    
+    LRUCache(int capacity) {
+        size_ = capacity;
+    }
+    
+    int get(int key) {
+        if (hash_map_.find(key) == hash_map_.end())
+            return -1;
+        cache_node_list_.splice(cache_node_list_.begin(), cache_node_list_, hash_map_[key]);
+        hash_map_[key] = cache_node_list_.begin();
+        
+        return hash_map_[key]->value_;
+    }
+    
+    void set(int key, int value) {
+        if (hash_map_.find(key) != hash_map_.end()){
+            cache_node_list_.splice(cache_node_list_.begin(), cache_node_list_, hash_map_[key]);
+            hash_map_[key] = cache_node_list_.begin();
+            hash_map_[key]->value_ = value;
+        }else{
+            if (size_ == hash_map_.size()){
+                hash_map_.erase(cache_node_list_.back().key_);
+                cache_node_list_.pop_back();
+            }
+            cache_node_list_.push_front(CacheNode(key, value));
+            hash_map_[key] = cache_node_list_.begin();
+        }
+    }
+    
+    std::list<CacheNode> cache_node_list_;
+    std::unordered_map<int, std::list<CacheNode>::iterator> hash_map_;
+    int size_;
+};
