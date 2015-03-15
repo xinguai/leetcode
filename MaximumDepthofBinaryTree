@@ -1,0 +1,30 @@
+/*
+ * Maximum Depth of Binary Tree
+ * 类似于求最小值
+ */
+ 
+ /**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int maxDepth(TreeNode *root) {
+        if (!root)
+            return 0;
+        int leftDepth = maxDepth(root->left);
+        int rightDepth = maxDepth(root->right);
+        
+        if (leftDepth == 0)
+            return rightDepth + 1;
+        else if (rightDepth == 0)
+            return leftDepth + 1;
+        else 
+            return std::max(leftDepth, rightDepth) + 1;
+    }
+};
