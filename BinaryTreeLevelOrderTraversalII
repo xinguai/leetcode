@@ -1,0 +1,64 @@
+/*
+ * Binary Tree Level Order Traversal II 
+ * Given a binary tree, return the bottom-up level order traversal of its nodes' values. 
+ (ie, from left to right, level by level from leaf to root).
+
+For example:
+Given binary tree {3,9,20,#,#,15,7},
+    3
+   / \
+  9  20
+    /  \
+   15   7
+return its bottom-up level order traversal as:
+[
+  [15,7],
+  [9,20],
+  [3]
+]
+解题思路：
+宽度优先遍历，然后将结果数据结构，翻转下
+ */
+ 
+ /**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<vector<int> > levelOrderBottom(TreeNode *root) {
+        std::vector<std::vector<int> > res;
+        
+        if (!root)
+            return res;
+        std::queue<TreeNode*> level_queue;
+        level_queue.push(root);
+        level_queue.push(NULL);
+        std::vector<int> one_level;
+        
+        while (!level_queue.empty()){
+            TreeNode* cur_node = level_queue.front();
+            level_queue.pop();
+            
+            if (cur_node){
+                one_level.push_back(cur_node->val);
+                if (cur_node->left)
+                    level_queue.push(cur_node->left);
+                if (cur_node->right)
+                    level_queue.push(cur_node->right);
+            }else{
+                res.push_back(one_level);
+                one_level.clear();
+                if (!level_queue.empty())
+                    level_queue.push(NULL);
+            }
+        }
+        std::reverse(res.begin(), res.end());
+        return res;
+    }
+};
