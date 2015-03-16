@@ -1,0 +1,62 @@
+/*
+ * Given an array S of n integers, find three integers in S such that the sum is closest to a given number, target. Return the sum of the three integers. You may assume that each input would have exactly one solution.
+
+    For example, given array S = {-1 2 1 -4}, and target = 1.
+
+    The sum that is closest to the target is 2. (-1 + 2 + 1 = 2).
+  *解题思路：
+  1、对数组排序
+  2、从[0,n-3]开始，找到找到离target-num[i]最近的2个元素，取最小值
+  若刚好等于0就返回
+  
+ */
+ 
+ class Solution {
+public:
+    int threeSumClosest(vector<int> &num, int target) {
+        int res, dis = INT_MAX;
+        int n = num.size();
+        int target_left = 0, tmp_dis = 0;
+        sort(num.begin(), num.end());
+        
+        for (int i = 0; i < n-2; ++i){
+            target_left = target - num[i];
+            int tmp_res = twoSumClosest(num, i+1, target_left);
+            if ((tmp_dis =abs(tmp_res - target_left)) < dis){
+                res = tmp_res + num[i];
+                dis = tmp_dis;
+                if (res == target)
+                    return res;
+            }
+        }
+        
+        return res;
+    }
+    
+    int twoSumClosest(std::vector<int>& num, int index, int target){
+        int head = index, tail = num.size() -1;
+        int res, dis = INT_MAX;
+        
+        while (head < tail){
+            int tmp = num[head] + num[tail];
+            if (tmp < target){
+               if (target - tmp < dis){
+                    res = tmp;
+                    dis = target - tmp;
+               }
+               head++;
+                
+            }else if (tmp > target){
+                if (tmp-target < dis){
+                    res = tmp;
+                    dis = tmp - target;
+                }
+                tail--;
+            }else{
+                return target;
+            }
+        }
+        
+        return res;
+    }
+};
