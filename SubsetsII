@@ -1,0 +1,41 @@
+/*
+ * Subsets II 
+ * Given a collection of integers that might contain duplicates, S, return all possible subsets.
+
+  Note:
+  Elements in a subset must be in non-descending order.
+ * The solution set must not contain duplicate subsets.
+ 解题思路：
+ 1.如果当前元素跟上轮元素没有重复，则此前所有元素都加上当前元素。
+ 2.如果当前元素跟上轮元素重复，则只上轮元素才加上当前元素。
+ 这位同学写得不错：http://www.cnblogs.com/TenosDoIt/p/3451902.html
+ */
+ 
+ 
+ class Solution {
+public:
+    vector<vector<int> > subsetsWithDup(vector<int> &S) {
+        std::vector<std::vector<int> > res(1);
+        int vec_size = S.size();
+        sort(S.begin(), S.end());
+        
+        if (vec_size == 0)
+            return res;
+        int last_elt = S[0], last_elt_num = 1;
+        
+        for (int i = 0; i < vec_size; ++i){
+            if (last_elt != S[i]){
+                last_elt = S[i];
+                last_elt_num = res.size();
+            }
+            
+            int cur_num = res.size();
+            for (int j = cur_num - 1; j >= cur_num-last_elt_num; --j){
+                res.push_back(res[j]);
+                res.back().push_back(S[i]);
+            }
+        }
+        
+        return res;
+    }
+};
