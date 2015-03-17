@@ -1,0 +1,44 @@
+/*
+ *Given a set of distinct integers, S, return all possible subsets.
+
+  Note:
+  Elements in a subset must be in non-descending order.
+  The solution set must not contain duplicate subsets.
+  For example,
+  If S = [1,2,3], a solution is:
+ * 解题思路：
+ * 1.相当于一个二叉树，从空集开始，每个元素，都有选于不选两个方式
+ * 2.深度优先遍历，等深度达到集合的大小时，将这个vector压入结果集。
+    http://www.cnblogs.com/TenosDoIt/p/3451902.html(这位同学写得很好)
+ 
+ */
+ 
+ 
+ class Solution {
+public:
+    vector<vector<int> > subsets(vector<int> &S) {
+        std::vector<int> path;
+        sort(S.begin(), S.end());
+        
+        dfs(S, 0, path);
+        
+        return res;
+    }
+    
+    void dfs(std::vector<int>& S, int level, std::vector<int>& path){
+        if (level == S.size()){
+            res.push_back(path);
+            return;
+        }
+        //choose
+        path.push_back(S[level]);
+        dfs(S, level + 1, path);
+        path.pop_back();
+        //nost choose
+        dfs(S, level + 1, path);
+    }
+    
+    std::vector<std::vector<int> >res;
+};
+ 
+ 
