@@ -1,0 +1,36 @@
+/*
+ * Given an array of strings, return all groups of strings that are anagrams.
+
+ * Note: All inputs will be in lower-case.
+ 解题思路：
+ 这道题搞懂题目的意思，先排序。
+ */
+ 
+ class Solution {
+public:
+    vector<string> anagrams(vector<string> &strs) {
+        std::unordered_map<std::string, std::vector<std::string> > anagram;
+        std::vector<std::string> vector_ret;
+        
+        typedef  std::unordered_map<std::string, std::vector<std::string> >::iterator Itr;
+        
+        for (size_t i = 0; i < strs.size(); ++i){
+            std::string str = strs[i];
+            std::sort(str.begin(), str.end());
+            if (anagram.find(str) != anagram.end()){
+                anagram[str].push_back(strs[i]);
+            }else{
+                anagram[str] = std::vector<std::string>(1, strs[i]);
+            }
+            
+        }
+        
+        for (Itr itr = anagram.begin(); itr != anagram.end(); ++itr){
+            if ((*itr).second.size() > 1){
+                vector_ret.insert(vector_ret.end(), (*itr).second.begin(), (*itr).second.end());
+            }
+        }
+        
+        return vector_ret;
+    }
+};
