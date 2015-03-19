@@ -1,0 +1,80 @@
+/*
+ * Given a singly linked list L: L0→L1→…→Ln-1→Ln,
+ * reorder it to: L0→Ln→L1→Ln-1→L2→Ln-2→…
+
+ * You must do this in-place without altering the nodes' values.
+ 解题思路：
+ 看清楚题意
+ 注意，链表翻转时的，最后一个元素置空（置空的时候不要出错）
+ */
+ 
+ /**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    void reorderList(ListNode *head) {
+        if (!head || !head->next || !head->next->next)
+            return;
+        //at least three number
+        ListNode *fast, *slow;
+        fast = slow = head;
+        
+        while (fast && fast->next){
+            fast = fast->next->next;
+            slow = slow->next;
+        }
+        
+        ListNode* second = slow->next;
+        slow->next = NULL;
+        reverse(second);
+        fast = head;
+        
+        while (second){
+            ListNode* first_next = fast->next;
+            ListNode* second_next = second->next;
+            fast->next = second;
+            second->next = first_next;
+            fast = first_next;
+            second = second_next;
+        }
+
+    }
+    
+    void reverse(ListNode* &head){
+        ListNode* cur = head;
+        if (!cur || !cur->next)
+            return;
+        ListNode* pre = cur;
+        cur = cur->next;
+        //pre->next = NULL;
+        
+        ListNode* next = NULL;
+
+        while(cur){
+            next = cur->next;
+            cur->next = pre;
+            pre = cur;
+            cur = next;
+        }
+        
+        head->next = NULL;
+        head = pre;
+        /*if(head == NULL || head->next == NULL)return;
+        ListNode *pre = head, *p = pre->next;
+         while(p != NULL)
+         {
+             ListNode *tmp = p->next;
+            p->next = pre;
+             pre = p;
+             p = tmp;
+        }
+         head->next = NULL;
+         head = pre;*/
+    }
+};
