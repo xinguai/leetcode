@@ -1,0 +1,47 @@
+/*
+ * Given two binary strings, return their sum (also a binary string).
+
+For example,
+a = "11"
+b = "1"
+Return "100".
+解题思路：
+需要小心，进位和特殊情况
+ *
+ */
+ 
+ 
+ class Solution {
+public:
+    string addBinary(string a, string b) {
+        int min_length = a.length(), max_length = b.length();
+        if (min_length > max_length){
+            max_length = a.length();
+            min_length = b.length();
+        }
+        std::string& max_str = (max_length==a.length())?a:b;
+        std::string& min_str = (min_length==b.length())?b:a;
+        std::string ret= "";
+        
+        int carry= 0;
+        for (int  i = 0; i < min_length; ++i){
+            int bit = (max_str[max_length -i -1] - '0') + (min_str[min_length -i -1] - '0') + carry;
+            carry = bit/2;
+            bit = bit%2;
+            ret += (bit == 1)?"1":"0";
+        }
+        
+        for (int i = min_length; i < max_length; ++i){
+            int bit = (max_str[max_length -i -1]- '0')  + carry;
+            carry = bit/2;
+            bit = bit%2;
+            ret += (bit == 1)?"1":"0";
+        }
+        
+        if (carry > 0)
+            ret += "1";
+        
+       std::reverse(ret.begin(), ret.end());
+       return ret;
+    }
+};
