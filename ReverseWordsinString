@@ -1,0 +1,62 @@
+/*
+ * Given an input string, reverse the string word by word.
+
+ * For example,
+ * Given s = "the sky is blue",
+ * return "blue is sky the".
+
+ * Update (2015-02-12):
+ * For C programmers: Try to solve it in-place in O(1) space.
+ */
+ 
+ class Solution {
+public:
+    void reverseWords(string &s) {
+        int tail = s.length() -1;
+        reverseWord(s, 0, tail);
+        int begin = 0;
+        int end = 0;
+        std::string str = "";
+        
+        while (begin <= tail){
+            
+            //skip space
+            while ((begin <= tail) && (s[begin] == ' '))
+                ++begin;
+            //if (begin >= tail)
+           
+                
+            end = begin;
+            
+            while ((end <= tail) && (s[end] != ' '))
+                ++end;
+                
+            if ((end <= tail && s[end] ==' ') || (end > tail))
+               --end;
+               
+            if (end >= begin){
+                reverseWord(s, begin, end);
+                if (str.length() > 0){
+                    str +=" ";
+                }
+                str += s.substr(begin,end -begin +1);
+             }
+             
+            begin = end + 1;
+        }
+        
+        s = str;
+    }
+    
+    void reverseWord(std::string& s, int begin, int end){
+        char ch;
+        
+        while(begin < end){
+            ch = s[begin];
+            s[begin] = s[end];
+            s[end] = ch;
+            ++begin;
+            --end;
+        }
+    }
+};
