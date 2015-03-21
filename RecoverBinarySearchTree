@@ -1,0 +1,41 @@
+/*
+ * Two elements of a binary search tree (BST) are swapped by mistake.
+
+Recover the tree without changing its structure.
+
+Note:
+A solution using O(n) space is pretty straight forward. Could you devise a constant space solution?
+ */
+ 
+ class Solution {
+public:
+    void recoverTree(TreeNode *root) {
+        mistake_node1 = mistake_node2 = pre_node = NULL;
+        if (!root)
+            return;
+        recursive(root);
+        swap(mistake_node1->val, mistake_node2->val);
+    }
+    
+    void recursive(TreeNode* root){
+        if (!root)
+            return;
+        if (root->left)
+            recursive(root->left);
+        if (pre_node){
+            if (pre_node->val > root->val){
+                if (!mistake_node1)
+                    mistake_node1 = pre_node, mistake_node2 = root;
+                else
+                    mistake_node2 = root;
+            }
+        }
+        pre_node = root;
+        if (root->right)
+            recursive(root->right);
+    }
+    
+    TreeNode* mistake_node1;
+    TreeNode* mistake_node2;
+    TreeNode* pre_node;
+};
