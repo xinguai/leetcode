@@ -1,0 +1,39 @@
+/*
+ * Implement strStr().
+
+Returns the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack.
+
+Update (2014-11-02):
+The signature of the function had been updated to return the index instead of the pointer. If you still see your function signature returns a char * or String, please click the reload button  
+to reset your code definition.
+解题思路：
+很糙的解决方案就是，你懂的
+还有一种
+ */
+ 
+ int strStr(char *haystack, char *needle) {
+        int hay_length = strlen(haystack);
+        int needle_length = strlen(needle);
+        char * p;
+        char* q;
+        
+        if (needle_length == 0)
+            return 0;
+        
+        for (int i = 0; i <= hay_length - needle_length; ++i){
+           p = haystack + i;
+           q = needle;
+           
+           while (*q != '\0'){
+               if (*p == *q){
+                   ++p;
+                   ++q;
+               }else{
+                   break;
+               }
+           }
+           if (*q == '\0')
+                return i;
+        }
+        return -1;
+    }
