@@ -1,0 +1,34 @@
+/*
+ * nique Paths Total Accepted: 38363 Total Submissions: 117468 My Submissions Question Solution 
+A robot is located at the top-left corner of a m x n grid (marked 'Start' in the diagram below).
+
+The robot can only move either down or right at any point in time. The robot is trying to reach the bottom-right corner of the grid (marked 'Finish' in the diagram below).
+
+How many possible unique paths are there?
+
+
+Above is a 3 x 7 grid. How many possible unique paths are there?
+
+ Note: m and n will be at most 100.
+ 解题思路：
+ 用动态规划，迭代公式为：
+ A(i,j) = m(i, j-1) + m(i-1,j)
+ 空间复杂度O(n)就可以
+ */
+ 
+ class Solution {
+public:
+    int uniquePaths(int m, int n) {
+        if (m <=0 || n<=0)
+            return 0;
+        std::vector<int> res(n, 0);
+        res[0] = 1;
+        
+        for (int i = 0; i < m; ++i){
+            for (int j = 1; j < n; ++j)
+                res[j] += res[j-1];
+        }
+        
+        return res[n -1];
+    }
+};
