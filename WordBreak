@@ -1,0 +1,41 @@
+/*
+ * Given a string s and a dictionary of words dict, determine if s can be segmented into a space-separated sequence of one or more dictionary words.
+
+ * For example, given
+ * s = "leetcode",
+ * dict = ["leet", "code"].
+ * Return true because "leetcode" can be segmented as "leet code".
+ 解题思路：
+ 1、用动态规划法解决问题。s(i,j)表示从下标i开始，长度为j的字符串，在不在字典里。
+ 2、s(i,j)=true; 如果s.substr(i, j-1)在字典里。或者s(i,k)=true && s(i+k,j-k)=true;
+ */
+ 
+ class Solution {
+public:
+    bool wordBreak(string s, unordered_set<string> &dict) {
+        int slength = s.length();
+        if (slength == 0 || dict.size() == 0)
+            return false;
+        std::vector<std::vector<bool> > dpvector(slength, std::vector<bool>(slength + 1, 0));
+        
+        for (int len = 1; len <= slength; ++len){
+            for (int i = 0; i < slength; ++i){
+                std::string substring = s.substr(i, len);
+                if (dict.find(substring) != dict.end()){
+                    dpvector[i][len] = true;
+                    continue;
+                }
+                
+                for (int k = 1; k < len; ++k){
+                    if (dpvector[i][k] && dpvector[i+k][len-k]){
+                        dpvector[i][len] = true;
+                        break;
+                    }
+                }
+            }
+        }
+        
+        return dpvector[0][slength];
+        
+    }
+};
