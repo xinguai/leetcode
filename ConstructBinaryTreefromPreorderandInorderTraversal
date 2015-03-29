@@ -1,0 +1,49 @@
+/*
+ * Construct Binary Tree from Preorder and Inorder Traversal Total Accepted: 29832 Total Submissions: 112883 My Submissions Question Solution 
+Given preorder and inorder traversal of a tree, construct the binary tree.
+
+Note:
+You may assume that duplicates do not exist in the tree.
+
+思路：
+递归，根据先序找到头，递归构建左右子树
+ */
+ 
+ /**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode *buildTree(vector<int> &preorder, vector<int> &inorder) {
+        
+       return buildTreeRecur(preorder, 0, preorder.size() -1,
+                             inorder, 0, inorder.size() -1); 
+    }
+    
+    TreeNode* buildTreeRecur(vector<int> &preorder, int prestart, int preend,
+                        vector<int> &inorder, int instart, int inend){
+        if (prestart > preend || instart > inend)
+            return NULL;
+        int iLeft = instart;
+        TreeNode* root = new TreeNode(preorder[prestart]);
+        
+        for (; iLeft <= inend; ++iLeft){
+            if (inorder[iLeft] == preorder[prestart])
+                break;
+        }
+        
+        int length = iLeft - instart;
+        
+        root->left = buildTreeRecur(preorder, prestart+1, prestart + length,
+                                    inorder, instart, iLeft-1);
+        root->right = buildTreeRecur(preorder, prestart + length + 1, preend,
+                                    inorder, iLeft + 1, inend);
+        return root;
+    }
+};
