@@ -1,0 +1,31 @@
+/*
+ * Suppose a sorted array is rotated at some pivot unknown to you beforehand.
+ * (i.e., 0 1 2 4 5 6 7 might become 4 5 6 7 0 1 2).
+ * 一个排序数组按照某个值进行了旋转
+解题思路：
+（1）：根据二分查找，会分成两半部分，中值分右半部分比。
+（2）：一个大于中值，一个小于中值，最小值必然存在小于中值的那一半部分
+（3）：还有一种情况就是等于中值，这样就只能一次减少一个right--;
+ */
+ 
+ class Solution {
+public:
+    int findMin(vector<int>& nums) {
+        int right = nums.size() - 1;
+        int left = 0;
+        
+        while (left < right){
+            int mid = (left + right)/2;
+            
+            if (nums[mid]> nums[right]){
+                left = mid + 1;
+            }else if(nums[mid]< nums[right]){
+                right = mid;
+            }else{
+                right = mid;
+            }
+        }
+        
+        return nums[left];
+    }
+};
