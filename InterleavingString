@@ -1,0 +1,24 @@
+/*
+ * Given s1, s2, s3, find whether s3 is formed by the interleaving of s1 and s2.
+
+* For example,
+* Given:
+* s1 = "aabcc",
+* s2 = "dbbca",
+
+* When s3 = "aadbbcbcac", return true.
+* When s3 = "aadbbbaccc", return false.
+
+解题思路：（动态规划）
+dp[i][j]:表示s1在位置i位置和s2在位置j交叉得到s3：长度为i+j
+if i == 0 && j==0
+  dp[i][j] = true;
+else if i == 0;
+  dp[i][j]= dp[i][j-1] && s2[j-1]==s3[i+j-1]
+else if j == 0
+  dp[i][j] = dp[i-1][j] && s1[i-1]==s3[i+j-1]
+else 
+  dp[i][j] = (dp[i-1][j] && s1[i-1]==s3[i+j-1]) || (dp[i][j-1] && s2[j-1] == s3[i+j-1])
+ */
+ 
+ 
